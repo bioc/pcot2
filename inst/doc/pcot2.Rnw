@@ -1,0 +1,276 @@
+% \VignetteIndexEntry{PCOT2 Vignette}
+% \VignetteDepends{pcot2}
+% \VignetteKeywords{Correlation Analysis}
+% \VignettePackage{pcot2}
+
+
+
+\documentclass[a4paper]{article}
+
+\title{PCOT2: Principal Coordinates and
+  Hotelling's $T^2$ for the analysis of microarray data}
+
+\author{Sarah Song and Mik Black}
+
+\begin{document}
+
+\maketitle 
+\section{Overview}
+\texttt{pcot2} is an R-package for the analysis of groups of genes in
+microarray experiments. It utilizes inter-gene correlation information
+to detect significant alterations in the activities of gene
+sets. Incorporating additional (usually functional) information into
+the data analysis process allows gene interactions to be investigated
+in a statistical framework. One of the reasons that gene set analysis
+is becoming important is that it is suitable for detecting small
+coordinated changes in expression of groups of genes which are
+functionally related, which may not be considered significant in a
+single gene analysis. This vignette gives a tutorial-style
+introduction to the functions in the \texttt{pcot2} package. These
+functions are used for testing and visualizing changes in expression
+activity for groups of genes. 
+
+\section{Example: ALL/AML data}
+In this example the ALL/AML leukemia data set of Golub \textit{et al.}(1999) is
+used to illustrate the functionality of the \texttt{pcot2}
+package. This data set contains 38 bone marrow samples obtained from
+adult leukemia patients, 11 relating to acute myeloid leukemia (AML,
+class 1) and 27 relating to acute lymphoblastic leukemia (ALL, class
+0). Gene expression levels were measured using Affymetrix high density
+oligonucleotide arrays containing 6817 human genes, of which 3051
+genes were considered suitable for analysis by Golub et al.(1999)
+after pre-processing. This data set is available as part of the
+\texttt{multtest} package and gene sets are defined as KEGG pathways
+using the \texttt{hu6800} annotation package. Both packages can be
+downloaded from www.bioconductor.org.  
+<<>>=
+library(pcot2)
+library(multtest)
+library(hu6800)  
+set.seed(1234567)
+@
+
+\section{The \texttt{pcot2} function}
+The \texttt{pcot2} function implements the PCOT2 testing method, which
+is a two-stage permutation-based approach for testing changes in
+activity in pre-specified gene sets. The function requires at least
+three inputs: gene expression data, sample class labels, and a gene
+category indicator matrix. The gene expression data should be in the
+form of a matrix with no missing values. Data pre-processing
+(e.g. normalization) must therefore take place before running the
+PCOT2 analysis.  
+
+<<>>=
+data(golub)
+rownames(golub) <- golub.gnames[,3]
+colnames(golub) <- golub.cl
+@
+
+The class labels represent two distinct experimental conditions (e.g.,
+AML and ALL). 
+
+<<>>=
+golub.cl
+@
+
+\noindent
+The gene category indicator matrix is designed to indicate presence or
+absence of genes in the pre-defined gene categories (e.g., gene
+pathways). The indicator matrix contains rows representing gene
+identifiers for genes present in the expression data, and columns
+representing pre-defined group names. The values 1 or 0 indicate the
+presence or absence of a gene in a particular group. 
+
+In this example, the \texttt{hu6800} annotation package is used to
+define the KEGG (http://www.genome.jp/kegg/pathway.html) pathways for
+all of 3051 genes in the data. The \texttt{getImat} function is used
+to generate an indicator matrix which includes 65 KEGG pathways
+containing at least 10 of the total 3051 genes. 
+
+<<>>=
+KEGG.list <- as.list(hu6800PATH)
+imat <- getImat(golub, KEGG.list, ms=10) 
+colnames(imat) <- paste("KEGG", colnames(imat), sep="")
+dim(imat)
+@
+
+Permutations are used to produce $p$-values based on the null
+distribution of the $T^2$ statistic.  By default \texttt{pcot2} will
+automatically run 1000 permutations. In order to minimize the time
+taken to build this vignette, only 10 permutations have been performed.
+
+<<>>=
+results <- pcot2(golub, golub.cl, imat, iter=10)
+@
+
+The output from the \texttt{pcot2} function can contain information on
+either all pathways or just significantly differentially expressed
+pathways, based on the value of $\alpha$ used in the function, where
+$\alpha$ determines the significance threshold for the permutation
+$p$-values. For each KEGG pathway, the number of genes in the pathway
+is listed, along with Hotelling's $T^2$ statistic. These are followed
+by parametric $p$-values for the test statistic, both raw and
+adjusted. The last two columns provide raw and adjusted
+permutation-based $p$-values. The default adjustment method is the false
+discovery rate controlling method of Benjamini and Yekutieli (2001). 
+
+<<>>=
+results$res.sig
+results$res.all
+@
+
+In the {\tt pcot2} function, the $T^2$ statistic can be calculated in
+two ways, using either a pooled estimate of correlation for the two
+classes (default) or an unpooled estimate. And users can set \textit{var.equal=F} if the correlation
+structure is assumed to differ across the two classes.
+
+In the first step of the PCOT2 analysis, the dimensionality of the gene
+expression data is reduced via principle coordinates. The default
+dimensionality in the \texttt{pcot2} function is set as
+\textit{ncomp=2}.  In the second step of the PCOT2 analysis, the distances between the 
+transformed groups are calculated via euclidean distances by
+default. Other distances (e.g., correlation or Spearman distances)
+can also be used by defining \textit{dist.method} in the function. 
+A permutation $p$-value for each category is calculated by
+re-arranging the sample labels.  The permutations can also be
+performed by permuting rows (genes), using {\tt permu='ByRow'}.  
+
+Table 1 lists computation times (in minutes) required to run 1000
+permutations of the \texttt{pcot2}
+function on the AML/ALL data under various parameter
+configurations.  The two machines used were a 3.2GHz Pentium 4 with 1Gb
+RAM running Microsoft Windows XP and R 2.1.0 (PC), and a 1.70GHz
+Pentium M with 256Mb of RAM running Fedora Core 3 and R 2.2.0 (Unix).
+
+\begin{table}[!hh]
+\caption {\textit{Computation times (minutes, 1000 permutations)}}
+\begin{tabular}{l c c}
+\hline
+Changes  & PC machine & UNIX machine\\
+\hline
+default setting & 5.6 & 6.8 \\ 
+var.equal=F & 5.5 & 6.8 \\ 
+comp=8 & 6 & 7.6 \\
+dist.method="euclidean" & 4.8 & 6 \\
+permu="ByRow" & 5.6 & 6.8 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\section{The \texttt{corplot} and \texttt{corplot2} functions}
+The \texttt{corplot} and \texttt{corplot2} functions enable
+visualization of both correlation and gene expression information for
+a particular gene category, in particular the groups identified as
+being differentially expressed.  The plot
+produced by the \texttt{corplot} function displays the pooled correlation
+calculated from the two classes, while the \texttt{corplot2} function
+produces a plot based on unpooled correlation. Gene names can
+be added to the plot using \textit{add.name=T} (default). The
+font size can be changed by setting the \textit{font.size}
+argument. The \textit{main} option specifies the title of the plot. 
+
+<<>>=
+sel <- c("04620","04120")
+pvalue <- c(0.001, 0.72)
+library(KEGG)
+pname <- unlist(mget(sel, env=KEGGPATHID2NAME))
+main <- paste("KEGG", sel, ": ", pname, ": ", "P=", pvalue, sep="")
+for(i in 1:length(sel)){
+fname <- paste("corplot2-KEGG",sel[i] , ".jpg", sep="")
+jpeg(fname, width=1600, height=1200, quality=100)
+selgene <- rownames(imat)[imat[,match(paste("KEGG",sel,sep="")[i],colnames(imat))]==1]
+corplot2(golub, selgene, golub.cl, main=main[i])
+dev.off()
+}
+@
+
+\begin{figure}[!tpb]%figure1
+\centerline{\includegraphics[scale=0.4,angle=0]{corplot2-KEGG04620.jpg}}
+\caption{KEGG04620}\label{fig:01}
+\end{figure}
+
+\begin{figure}[!tpb]%figure2
+\centerline{\includegraphics[scale=0.4,angle=0]{corplot2-KEGG04120.jpg}}
+\caption{KEGG04120}\label{fig:02}
+\end{figure}
+
+%<<plot2, results=hide, fig=T>>=
+%corplot2(golub, selgene, golub.cl, main=main[2])
+%@
+
+The argument \textit{inputP} allows users to input the $p$-values of
+individual genes calculated using other approaches, such as the limma package 
+(Smyth \textit{et al.}, 2004), allowing the results from both per-gene and 
+per-pathway analysis to be printed on a single plot. To allow
+users to identify genes from in correlation image plots, the 
+argument \textit{gene.locator=T} allows the selection of interesting 
+(e.g., highly correlated and differential
+expressed between two classes) genes by clicking beginning and end
+points on the main diagonal of the image plots.  This prints the
+identifiers for the selected genes.  Further details of this
+functionality are provided in the HowToUseGeneLocator.pdf document.
+The usage of \texttt{corplot2} is similar to that for the \texttt{corplot}
+function. 
+
+%<<>>=
+%selgene <- rownames(imat)[imat[,match("KEGG04620",colnames(imat))]==1]
+%out <- corplot2(golub, selgene, golub.cl, main="KEGG04620", add.name=F, gene.locator=T)
+%out
+%@
+
+\section{The \texttt{aveProbes} function}
+In Affymetrix gene expression data, a unique gene can often link to multiple
+probe sets, with such genes then having a greater influence on the
+pathway analysis (particularly if the gene is differentially expressed). 
+In order to solve this problem, the \texttt{aveProbe} function is
+provided to change the multiple probe
+data to the unique gene data by taking the median of the probe
+values. This function can be used to transform both expression data and
+the indicator matrix by providing a vector of unique gene identifiers. 
+
+<<>>=
+pathlist <- as.list(hu6800PATH)
+pathlist <- pathlist[match(rownames(golub), names(pathlist))]
+ids <- unlist(mget(names(pathlist), env=hu6800SYMBOL))
+#### transform data matrix only ####
+newdata <- aveProbe(x=golub, ids=ids)$newx
+#### transform both data and imat ####
+output <- aveProbe(x=golub, imat=imat, ids=ids)
+newdata <- output$newx
+newimat <- output$newimat
+newimat <- newimat[,apply(newimat, 2, sum)>=10]
+dim(newdata)
+dim(newimat)
+@
+
+
+After the multiple probe data set has been changed to the unique gene symbol data, further analysis such as testing and visualizing pathways can be done on the new data set. 
+
+%\begin{figure}[!tpb]%figure3
+%\centerline{\includegraphics[scale=0.4,angle=0]{corplot2-ave-04620-small.jpg}}
+%\caption{Averaging multiple probes on KEGG04620}\label{fig:03}
+%\end{figure}
+
+%<<>>=
+%selgene <- rownames(newimat)[newimat[,match("KEGG04620",colnames(newimat))]==1]
+%out <- corplot2(newdata, selgene, golub.cl, main="KEGG04620", add.name=F, gene.locator=T)
+%out
+%@
+
+
+\begin{thebibliography}{}
+
+\bibitem{ben-yek-2001} Benjamini,B.Y. and Yekutieli,D. (2001) The control of the false discovery rate in multiple testing under dependency. {\it The Annals of Statistics}, {\bf 29}, 1165-1188.
+
+\bibitem{bioconductor04} Gentleman,R.C., Carey,V.J., Bates,D.M., Bolstad,B., Dettling,M., Dudoit,S., Ellis,B., Gautier,L., Ge,Y., Gentry,J. {\it et al.} (2004) Bioconductor: open software development for computational biology and bioinformatics. {\it Genome Biology}, {\bf 5}, R80.
+
+\bibitem{golub-1999} Golub,T.R., Slonim,D.K., Tamayo,P., Huard,C., Gaasenbeek,M., Mesirov,J.P., Coller,H., Loh,M.L., Downing,J.R., Caligiuri,M.A. {\it et al.} (1999) Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring, {\it Science}, {\bf 286}, 531-537.
+
+\bibitem{smyth-2004} Smyth,G.K. (2004) Linear models and empirical Bayes methods for assessing differential expression in microarray experiments. {\it Statistical Applications in Genetics and Molecular Biology}, {\bf 3}, No.1, Article 3.
+
+\end{thebibliography}
+
+\end{document}
+
