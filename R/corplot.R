@@ -16,7 +16,7 @@ function(x, sel, cla=NULL, inputP=NULL, main, gene.locator=FALSE, add.name=TRUE,
   av3 <- av1-av2
 
   range.x <- range(x)  
-  dif <- apply(x[,ind1], 1, mean)-apply(x[,ind2], 1, mean)
+  dif <- rowMeans(x[,ind1])-rowMeans(x[,ind2])
   range.dif <- c(-max(abs(dif)), max(abs(dif)))
 
   if (!gene.locator) plotCor(rr[ord,ord], inputP, av1, av2, av3, range.x, range.dif, labels=lname, main=main, add.name=add.name, font.size=font.size) else {

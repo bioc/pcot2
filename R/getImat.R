@@ -12,7 +12,7 @@ function(x, pathlist, ms=10){
     if(!is.na(pathlist[[ind]][1])) imat[i,match(pathlist[[ind]], pname)] <- 1
   }
   dimnames(imat) <- list(gname, pname)
-  imat <- imat[,apply(imat,2,sum)>=ms]
+  imat <- imat[,colSums(imat)>=ms]
   return(imat)
 }
 

@@ -8,8 +8,8 @@ function(x, ind1, ind2){
   SD <- var(dat2)
   S <- ((nd-1)*SD + (nn-1)*SN)/(nd+nn-2)
 
-  xbar1 <- apply(dat1, 2, mean)
-  xbar2 <- apply(dat2, 2, mean)
+  xbar1 <- colMeans(dat1)
+  xbar2 <- colMeans(dat2)
   xdiff <- xbar1 - xbar2
 
   t2 <- ((nd*nn)/(nd+nn))*(xdiff %*% solve(S) %*% xdiff)

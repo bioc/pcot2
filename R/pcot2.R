@@ -7,7 +7,7 @@ function(emat, class=NULL, imat, permu="ByColumn", iter=1000, alpha=0.05, adjP.m
    ind1 <- which(cla==lab1); ind2 <- which(cla==lab2)
     
    npath <- ncol(imat)
-   num <- apply(imat, 2, sum)
+   num <- colSums(imat)
    tstat <- p.nor <- double(npath)
 
    for (i in 1:npath){

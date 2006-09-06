@@ -45,21 +45,21 @@ function(x, sel, cla=NULL, inputP=NULL, main, gene.locator=FALSE, add.name=TRUE,
     #5:average expression profiles in ClassI, ordered by ClassI
     par(mar=c(1,0,1,1.5),mgp=c(0,0,0))
     range.x <- range(x)
-    av1 <- t(apply(x[match(hc$label[ord1], rownames(x)),ind1],1,mean)[n:1])
+    av1 <- t(rowMeans(x[match(hc$label[ord1], rownames(x)),ind1])[n:1])
     image(1:1, 1:n, as.matrix(av1), col = wb(nrgcols), axes = FALSE, xlab = "", ylab = "", zlim=range.x)
     title(paste("",lab1, sep=""))
     box(col="black")
 
     #6:average expression profiles in ClassIV, ordered by ClassI
     par(mar=c(1,1.5,1,0),mgp=c(0,0,0))
-    av2 <- t(apply(x[match(hc$label[ord1], rownames(x)),ind2],1,mean)[n:1])
+    av2 <- t(rowMeans(x[match(hc$label[ord1], rownames(x)),ind2])[n:1])
     image(1:1, 1:n, as.matrix(av2), col = wb(nrgcols), axes = FALSE, xlab = "", ylab = "", zlim=range.x)
     title(paste("",lab2, sep=""))
     box(col="black")
 
     #7:Difference, ordered by classI
     av3 <- av1-av2
-    dif <- apply(x[,ind1], 1, mean)-apply(x[,ind2], 1, mean)  #difference for all the genes
+    dif <- rowMeans(x[,ind1])-rowMeans(x[,ind2])  #difference for all the genes
     range.dif <- c(-max(abs(dif)), max(abs(dif)))  
     if(!is.null(inputP)){
        if (add.name) {
@@ -83,13 +83,13 @@ function(x, sel, cla=NULL, inputP=NULL, main, gene.locator=FALSE, add.name=TRUE,
 
     #8:average expression profiles in ClassI, ordered by ClassIV
     par(mar=c(1,0,1,1.5),mgp=c(0,0,0))
-    av1 <- t(apply(x[match(hc$label[ord2], rownames(x)),ind1],1,mean)[n:1])
+    av1 <- t(rowMeans(x[match(hc$label[ord2], rownames(x)),ind1])[n:1])
     image(1:1, 1:n, as.matrix(av1), col = wb(nrgcols), axes = FALSE, xlab = "", ylab = "", zlim=range.x)
     box(col="black")
 
     #9:average expression profiles in ClassIV, ordered by ClassIV
     par(mar=c(1,1.5,1,0),mgp=c(0,0,0))
-    av2 <- t(apply(x[match(hc$label[ord2], rownames(x)),ind2],1,mean)[n:1])
+    av2 <- t(rowMeans(x[match(hc$label[ord2], rownames(x)),ind2])[n:1])
     image(1:1, 1:n, as.matrix(av2), col = wb(nrgcols), axes = FALSE, xlab = "", ylab = "", zlim=range.x)
     box(col="black")
 
