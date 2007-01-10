@@ -8,5 +8,4 @@ Suggests: multtest, hu6800, KEGG, mvtnorm
 Description: PCOT2 is a permutation-based method for investigating changes in the activity of multi-gene networks. It utilizes inter-gene correlation information to detect significant alterations in gene network activities. Currently it can be applied to two-sample comparisons. 
 License: GPL version 2 or newer
 biocViews: Microarray, DifferentialExpression
-Packaged: Fri Sep 1 11:40:59 2006; biocbuild
 
