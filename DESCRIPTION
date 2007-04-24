@@ -1,6 +1,6 @@
 Package: pcot2
 Title: Principle Coordinates and Hotelling's T-Square method
-Version: 1.4.0
+Version: 1.5.0
 Author: Sarah Song, Mik Black
 Maintainer: Sarah Song <qson003@stat.auckland.ac.nz>
 Depends: R (>= 2.0.0), grDevices, Biobase, amap
