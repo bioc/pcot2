@@ -125,7 +125,7 @@ classes (default) or an unpooled estimate. And users can set \textit{var.equal=F
 structure is assumed to differ across the two classes.
 
 In the first step of the PCOT2 analysis, the dimensionality of the gene
-expression data is reduced via principle coordinates. The default
+expression data is reduced via principal coordinates. The default
 dimensionality in the \texttt{pcot2} function is set as
 \textit{ncomp=2}.  In the second step of the PCOT2 analysis, the distances between the 
 transformed groups are calculated via euclidean distances by

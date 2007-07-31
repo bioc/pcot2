@@ -1,6 +1,6 @@
 \name{pcot2}
 \alias{pcot2}
-\title{Principle Coordinates and Hotelling's T-Square}
+\title{Principal Coordinates and Hotelling's T-Square}
 \description{
 The \code{pcot2} function implements the PCOT2 testing method, which is a
 two-stage permutation-based approach for testing changes in activity in
@@ -32,7 +32,7 @@ particular group.}
     correlation for the two classes or an unpooled estimate for
     calculating each T-squared statistic. By default, the pooled estimate is used.}
   \item{ncomp}{  The dimensionality to which the data matrix is reduced
-    via principle coordinates. The default dimensionality is set as
+    via principal coordinates. The default dimensionality is set as
     \code{ncomp=2}.}
    \item{dist.method}{Specifies the method for calculating
     distance in the PCO procedure.  The available distance methods are
