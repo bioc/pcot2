@@ -33,8 +33,6 @@ corplot(x, sel, cla = NULL, inputP = NULL, main, gene.locator = FALSE, add.name 
     \code{amap} package and the help documentation for the \code{Dist} function.}
 }
 
-\references{S.Song and M.Black (2006) PCOT2: an R package for assessing
-  expression changes in groups of related genes. Submitted to Bioinformatics.}
 \author{ Sarah Song and Mik Black }
 
 \note{}

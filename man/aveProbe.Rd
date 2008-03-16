@@ -31,8 +31,6 @@ aveProbe(x, imat = NULL, ids)
   \item{newimat}{A new imat (indicator matrix) with rows representing
     the unique gene identifiers and columns representing gene sets. }
 }
-\references{S.Song and M.Black (2006) PCOT2: an R package for assessing
-  expression changes in groups of related genes. Submitted to Bioinformatics.}
 \author{ Sarah Song and Mik Black }
 
 \seealso{\code{\link{pcot2}},\code{\link{corplot}},\code{\link{corplot2}}}

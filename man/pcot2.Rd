@@ -49,8 +49,7 @@ particular group.}
   \item{comparison}{Print the contrast used in the analysis}
   ...
 }
-\references{S.Song and M.Black (2006) PCOT2: an R package for assessing
-  expression changes in groups of related genes. Submitted to Bioinformatics.}
+
 \author{ Sarah Song and Mik Black }
 
 \seealso{\code{\link{corplot}},\code{\link{corplot2}},\code{\link{aveProbe}}}

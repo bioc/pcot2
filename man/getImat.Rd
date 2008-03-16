@@ -26,8 +26,7 @@ getImat(x, pathlist, ms = 10)
 
 \value{
   An indicator matrix is returned. The matrix value is 1 (gene in) or 0 (gene out)}
-\references{S.Song and M.Black (2006) PCOT2: an R package for assessing
-  expression changes in groups of related genes. Submitted to Bioinformatics.}
+
 \author{ Sarah Song and Mik Black }
 
 \seealso{\code{\link{pcot2}},\code{\link{corplot}},\code{\link{corplot2}},\code{\link{aveProbe}}}
