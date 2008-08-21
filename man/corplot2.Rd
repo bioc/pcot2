@@ -38,7 +38,7 @@ corplot2(x, sel, cla = NULL, inputP = NULL, main, gene.locator = FALSE, add.name
 
 \examples{
 library(multtest)
-library(hu6800)  
+library(hu6800.db)  
 data(golub)
 rownames(golub) <- golub.gnames[,3]
 colnames(golub) <- golub.cl
@@ -47,7 +47,7 @@ imat <- getImat(golub, KEGG.list, ms=10)
 colnames(imat) <- paste("KEGG", colnames(imat), sep="")
 sel <- c("04620","04120")
 pvalue <- c(0.001, 0.72)
-library(KEGG)
+library(KEGG.db)
 pname <- unlist(mget(sel, env=KEGGPATHID2NAME))
 main <- paste("KEGG", sel, ": ", pname, ": ", "P=", pvalue, sep="")
 for(i in 1:length(sel)){

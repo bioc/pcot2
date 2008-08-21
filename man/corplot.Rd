@@ -40,7 +40,7 @@ corplot(x, sel, cla = NULL, inputP = NULL, main, gene.locator = FALSE, add.name 
 
 \examples{
 library(multtest)
-library(hu6800)  
+library(hu6800.db)  
 data(golub)
 rownames(golub) <- golub.gnames[,3]
 colnames(golub) <- golub.cl

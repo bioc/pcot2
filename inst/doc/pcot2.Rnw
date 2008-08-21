@@ -41,12 +41,12 @@ oligonucleotide arrays containing 6817 human genes, of which 3051
 genes were considered suitable for analysis by Golub et al.(1999)
 after pre-processing. This data set is available as part of the
 \texttt{multtest} package and gene sets are defined as KEGG pathways
-using the \texttt{hu6800} annotation package. Both packages can be
+using the \texttt{hu6800.db} annotation package. Both packages can be
 downloaded from www.bioconductor.org.  
 <<>>=
 library(pcot2)
 library(multtest)
-library(hu6800)  
+library(hu6800.db)  
 set.seed(1234567)
 @
 
@@ -81,7 +81,7 @@ identifiers for genes present in the expression data, and columns
 representing pre-defined group names. The values 1 or 0 indicate the
 presence or absence of a gene in a particular group. 
 
-In this example, the \texttt{hu6800} annotation package is used to
+In this example, the \texttt{hu6800.db} annotation package is used to
 define the KEGG (http://www.genome.jp/kegg/pathway.html) pathways for
 all of 3051 genes in the data. The \texttt{getImat} function is used
 to generate an indicator matrix which includes 65 KEGG pathways
@@ -174,7 +174,7 @@ argument. The \textit{main} option specifies the title of the plot.
 <<>>=
 sel <- c("04620","04120")
 pvalue <- c(0.001, 0.72)
-library(KEGG)
+library(KEGG.db)
 pname <- unlist(mget(sel, env=KEGGPATHID2NAME))
 main <- paste("KEGG", sel, ": ", pname, ": ", "P=", pvalue, sep="")
 for(i in 1:length(sel)){
