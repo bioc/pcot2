@@ -1,0 +1,5 @@
+
+export("aveExprs", "aveProbe", "corplot2", "corplot", "Cor", "geneLocator", "getImat", "pco", "pcot2", "plotCor", "rb", "rg", "t2.permu", "t2", "t2.unequ", "wb")
+
+importFrom("amap", "Dist")
+import("Biobase")
