@@ -35,7 +35,6 @@ corplot(x, sel, cla = NULL, inputP = NULL, main, gene.locator = FALSE, add.name 
 
 \author{ Sarah Song and Mik Black }
 
-\note{}
 \seealso{\code{\link{pcot2}},\code{\link{corplot2}},\code{\link{aveProbe}}}
 
 \examples{
