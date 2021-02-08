@@ -1,6 +1,6 @@
 Package: pcot2
 Title: Principal Coordinates and Hotelling's T-Square method
-Version: 1.59.0
+Version: 1.59.1
 Author: Sarah Song, Mik Black
 Maintainer: Sarah Song <qson003@stat.auckland.ac.nz>
 Depends: R (>= 2.0.0), grDevices, Biobase, amap
@@ -8,3 +8,4 @@ Suggests: multtest, hu6800.db, KEGG.db, mvtnorm
 Description: PCOT2 is a permutation-based method for investigating changes in the activity of multi-gene networks. It utilizes inter-gene correlation information to detect significant alterations in gene network activities. Currently it can be applied to two-sample comparisons. 
 License: GPL (>= 2)
 biocViews: Microarray, DifferentialExpression, KEGG, GeneExpression, Network
+PackageStatus: Deprecated
